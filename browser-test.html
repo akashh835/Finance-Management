@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Tests</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .test-results {
+      margin-top: 20px;
+    }
+    .test-pass {
+      color: green;
+    }
+    .test-fail {
+      color: red;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Browser Tests</h1>
+  <button id="run-tests">Run Tests</button>
+  <div class="test-results" id="test-results"></div>
+
+  <script>
+    // Simple test function
+    function runTests() {
+      const resultsDiv = document.getElementById('test-results');
+      resultsDiv.innerHTML = '';
+      
+      let passCount = 0;
+      let failCount = 0;
+      
+      function addResult(name, passed, error) {
+        const div = document.createElement('div');
+        div.className = passed ? 'test-pass' : 'test-fail';
+        div.textContent = passed ? `✅ ${name}` : `❌ ${name}`;
+        resultsDiv.appendChild(div);
+        
+        if (!passed && error) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'test-error';
+          errorDiv.textContent = error;
+          resultsDiv.appendChild(errorDiv);
+        }
+        
+        if (passed) {
+          passCount++;
+        } else {
+          failCount++;
+        }
+      }
+      
+      // Test 1: Simple addition
+      try {
+        if (1 + 1 !== 2) {
+          throw new Error('1 + 1 should equal 2');
+        }
+        addResult('Simple addition', true);
+      } catch (error) {
+        addResult('Simple addition', false, error.message);
+      }
+      
+      // Test 2: String concatenation
+      try {
+        if ('hello ' + 'world' !== 'hello world') {
+          throw new Error('String concatenation failed');
+        }
+        addResult('String concatenation', true);
+      } catch (error) {
+        addResult('String concatenation', false, error.message);
+      }
+      
+      // Test 3: Object equality
+      try {
+        const obj1 = { name: 'John', age: 30 };
+        const obj2 = { name: 'John', age: 30 };
+        if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
+          throw new Error('Object equality failed');
+        }
+        addResult('Object equality', true);
+      } catch (error) {
+        addResult('Object equality', false, error.message);
+      }
+      
+      // Test 4: Mock auth service
+      try {
+        // Mock API
+        const api = {
+          post: (url, data) => {
+            console.log(`API POST called with URL: ${url}, data:`, data);
+            return Promise.resolve({
+              data: {
+                token: 'fake-token',
+                user: { id: '123', name: 'Test User', email: data.email }
+              }
+            });
+          }
+        };
+        
+        // Mock localStorage
+        const localStorage = {
+          items: {},
+          getItem: (key) => localStorage.items[key],
+          setItem: (key, value) => {
+            localStorage.items[key] = value;
+          },
+          removeItem: (key) => {
+            delete localStorage.items[key];
+          }
+        };
+        
+        // Auth service
+        const authService = {
+          login: async (credentials) => {
+            const response = await api.post('/auth/login', credentials);
+            localStorage.setItem('token', response.data.token);
+            return response.data;
+          }
+        };
+        
+        // Test the login function
+        authService.login({ email: 'test@example.com', password: 'password123' })
+          .then(result => {
+            if (result.token !== 'fake-token') {
+              throw new Error('Login failed to return correct token');
+            }
+            if (localStorage.getItem('token') !== 'fake-token') {
+              throw new Error('Login failed to store token in localStorage');
+            }
+            addResult('Auth service login', true);
+          })
+          .catch(error => {
+            addResult('Auth service login', false, error.message);
+          });
+        
+      } catch (error) {
+        addResult('Auth service login', false, error.message);
+      }
+      
+      // Add summary
+      const summaryDiv = document.createElement('h3');
+      summaryDiv.textContent = `Results: ${passCount} passed, ${failCount} failed`;
+      resultsDiv.appendChild(summaryDiv);
+    }
+    
+    // Set up event listener
+    document.getElementById('run-tests').addEventListener('click', runTests);
+  </script>
+</body>
+</html>

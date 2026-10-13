@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Expense & Budget Analyzer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Personal Expense & Budget Analyzer</h1>
+      <p class="subtitle">Track income, expenses, and view monthly summaries</p>
+    </header>
+
+    <main class="main">
+      <!-- Add transaction form -->
+      <section class="card form-section">
+        <h2>Add transaction</h2>
+        <form id="transaction-form" class="transaction-form">
+          <div class="form-row">
+            <label>
+              <input type="radio" name="type" value="income" checked /> Income
+            </label>
+            <label>
+              <input type="radio" name="type" value="expense" /> Expense
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount (₹)</label>
+            <input type="number" id="amount" name="amount" min="0" step="0.01" placeholder="0.00" required />
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="">Select category</option>
+              <!-- Income categories -->
+              <optgroup label="Income" id="income-categories">
+                <option value="Salary">Salary</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Investment">Investment</option>
+                <option value="Other Income">Other Income</option>
+              </optgroup>
+              <!-- Expense categories -->
+              <optgroup label="Expense" id="expense-categories">
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Rent">Rent</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Description (optional)</label>
+            <input type="text" id="description" name="description" placeholder="e.g. Groceries, Uber" />
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Add transaction</button>
+        </form>
+      </section>
+
+      <!-- Balance overview -->
+      <section class="card balance-section">
+        <h2>Current balance</h2>
+        <div id="balance-display" class="balance-display">₹ 0.00</div>
+        <div class="balance-breakdown">
+          <span class="income-label">Total income: <strong id="total-income">₹ 0.00</strong></span>
+          <span class="expense-label">Total expenses: <strong id="total-expense">₹ 0.00</strong></span>
+        </div>
+      </section>
+
+      <!-- Monthly summary -->
+      <section class="card summary-section">
+        <h2>Monthly summary</h2>
+        <div class="month-selector">
+          <label for="summary-month">Month</label>
+          <select id="summary-month" aria-label="Select month"></select>
+          <label for="summary-year">Year</label>
+          <select id="summary-year" aria-label="Select year"></select>
+        </div>
+        <div id="monthly-summary" class="monthly-summary">
+          <p class="summary-row">
+            <span>Income</span>
+            <span id="month-income">₹ 0.00</span>
+          </p>
+          <p class="summary-row">
+            <span>Expenses</span>
+            <span id="month-expenses">₹ 0.00</span>
+          </p>
+          <p class="summary-row summary-net">
+            <span>Net</span>
+            <span id="month-net">₹ 0.00</span>
+          </p>
+          <div class="category-bars" id="category-bars">
+            <p class="bars-title">Spending by category (text bars)</p>
+            <div id="category-bars-content"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent transactions -->
+      <section class="card transactions-section">
+        <h2>Recent transactions</h2>
+        <div id="transactions-list" class="transactions-list">
+          <p class="empty-state" id="empty-state">No transactions yet. Add income or expenses above.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Data is stored in your browser (LocalStorage). Clear site data will reset the app.</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
