@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Smart Budgeting and Expense Tracking Application
 
 A comprehensive financial management application that helps users track expenses, manage budgets, set savings goals, and gain insights into their financial health.
@@ -203,3 +204,7 @@ Smart Budgeting and Expense Tracking Application
 # Finance-Management
 Smart Budgeting and Expence Tracking Application 
 >>>>>>> d840b9626b86c67de72063c805e2ce174dd56b76
+=======
+# Finance-Management
+Smart Budgeting and Expense Tracking Application
+>>>>>>> 0f5ebf7bbdf6777450b8bfa98bd5ec89b6515cb5
